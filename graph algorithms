@@ -1,0 +1,25 @@
+======================================================== GRAPH ALGORITHMS ===============================================================
+
+    void dfs(int u, vector<int> graph[], vector<bool>& visited, vector<int>& result){
+        
+        if(visited[u] == true)
+            return;
+            
+        visited[u] = true;
+        result.push_back(u);
+        
+        for(int &v : graph[u]){
+            if(visited[v] == false)
+                dfs(v, graph, visited, result);
+        }
+    }
+    
+    vector<int> dfsOfGraph(int n, vector<int> graph[]) {
+        
+        vector<int> result;
+        vector<bool> visited(n, false);
+        
+        dfs(0, graph, visited, result);
+        
+        return result;
+    }
