@@ -14,12 +14,46 @@
         }
     }
     
-    vector<int> dfsOfGraph(int n, vector<int> graph[]) {
+    vector<int> dfsOfGraph(int n, vector<int> graph[]) { // Dfs of graph
         
         vector<int> result;
         vector<bool> visited(n, false);
         
         dfs(0, graph, visited, result);
+        
+        return result;
+    }
+
+==========================================================================================================================================
+    
+    void bfs(int u, vector<int> graph[], vector<bool>& visited, vector<int>& result){
+        
+        queue<int> q;
+        q.push(u);
+        visited[u] = true;
+        
+        
+        while(q.empty() == 0){
+            int node = q.front();
+            q.pop();
+            result.push_back(node);
+            
+            for(int &v : graph[node]){
+                if(visited[v] == false){
+                    q.push(v);
+                    visited[v] = true;
+                }
+            }
+        }
+        
+    }
+    
+    vector<int> bfsOfGraph(int n, vector<int> graph[]) { // Bfs of graph
+        
+        vector<int> result;
+        vector<bool> visited(n, false);
+        
+        bfs(0, graph, visited, result);
         
         return result;
     }
