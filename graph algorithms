@@ -57,3 +57,59 @@
         
         return result;
     }
+
+=========================================================================================================================================
+    // detect cycle in an undirected graph.
+    
+    bool bfs(int s, vector<int> graph[], vector<bool>& visited){
+        
+        queue<pair<int,int>> q;
+        q.push({s, -1});
+        visited[s] = true;
+        
+        while(q.empty() == 0){
+            auto t = q.front();
+            q.pop();
+            
+            int u = t.first, parent = t.second;
+            
+            for(int &v : graph[u]){
+                if(visited[v] == false){
+                    q.push({v, u});
+                    visited[v] = true;
+                }
+                else if(v != parent)
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    bool dfs(int u, int parent, vector<int> graph[], vector<bool>& visited){
+        
+        visited[u] = true;
+        
+        for(int &v : graph[u]){
+            if(v == parent)
+                continue;
+            if(visited[v] == true)
+                return true;
+            if(dfs(v, u, graph, visited))
+                return true;
+        }
+        
+        return false;
+    }
+    
+    
+    bool isCycle(int n, vector<int> graph[]) {
+        
+        vector<bool> visited(n, false);
+        
+        for(int i = 0; i < n; i++)
+            if(visited[i] == false && dfs(i, -1, graph, visited))
+                return true;
+        
+        return false;
+    }
