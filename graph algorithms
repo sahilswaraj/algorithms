@@ -113,3 +113,60 @@
         
         return false;
     }
+
+=========================================================================================================================================
+
+    vector<int> parent;
+    vector<int> rank;
+    
+    int Find(int u){
+        if(parent[u] == u)
+            return u;
+        
+        return parent[u] = Find(parent[u]);
+    }
+    
+    void Union(int u, int v){
+        
+        int uParent = Find(u);
+        int vParent = Find(v);
+        
+        if(uParent == vParent)
+            return;
+        
+        if(rank[uParent] > rank[vParent])
+            parent[vParent] = uParent;
+        else if(rank[uParent] < rank[vParent])
+            parent[uParent] = vParent;
+        else{
+            parent[uParent] = vParent;
+            rank[vParent]++;
+        }
+    }
+    
+    int detectCycle(int n, vector<int>graph[]) // cycle detection in unditected graph usning Union-Find
+    {
+        parent.resize(n);
+        rank.resize(n);
+        
+        for(int i = 0; i < n; i++){
+            parent[i] = i;
+            rank[i] = 0;
+        }
+        
+        for(int u = 0; u < n; u++){
+            for(int &v : graph[u]){
+                if(u < v){
+                    int uParent = Find(u);
+                    int vParent = Find(v);
+                    
+                    if(uParent == vParent)
+                        return true;
+                    
+                    Union(u, v);
+                }
+            }
+        }
+        
+        return false;
+    }
