@@ -119,14 +119,14 @@
     vector<int> parent;
     vector<int> rank;
     
-    int Find(int u){
+    int Find(int u){    // find using path compression
         if(parent[u] == u)
             return u;
         
         return parent[u] = Find(parent[u]);
     }
     
-    void Union(int u, int v){
+    void Union(int u, int v){   // union by rank
         
         int uParent = Find(u);
         int vParent = Find(v);
