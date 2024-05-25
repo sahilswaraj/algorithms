@@ -241,3 +241,69 @@
     }
 
 =======================================================================================================================================
+ 
+    bool isCyclic(int n, vector<int> graph[]) { // Kahn's algorithm for cycle detection in directed graph
+        
+        queue<int> q;
+        vector<int> indegree(n, 0);
+        
+        for(int u = 0; u < n; u++)
+            for(int &v : graph[u])
+                indegree[v]++;
+        
+        int count = 0;
+        
+        for(int i = 0; i < n; i++)
+            if(indegree[i] == 0){
+                q.push(i);
+                count++;
+            }
+
+        while(q.empty() == 0){
+            int u = q.front();
+            q.pop();
+
+            for(int &v : graph[u]){
+                indegree[v]--;
+                if(indegree[v] == 0){
+                    q.push(v);
+                    count++;
+                }
+            }
+        }
+        
+        return (count == n) ? false : true;
+
+    }
+
+=========================================================================================================================================
+
+    bool isCycleDfs(int source, vector<int> adj[], vector<bool>& visited, vector<bool>& inStack){
+        
+        visited[source] = true;
+        inStack[source] = true;
+        
+        for(int &u : adj[source]){
+            if(visited[u] == false && isCycleDfs(u,adj, visited, inStack))
+                return true;
+            else if(inStack[u] == true)
+                return true;
+        }
+        
+        inStack[source] = false;
+        return false;
+    }
+    
+    bool isCyclic(int V, vector<int> adj[]) {
+        
+        vector<bool> visited(V, false);
+        vector<bool> inStack(V, false);
+        
+        for(int i = 0; i < V; i++){
+            if(visited[i] == false && isCycleDfs(i, adj, visited, inStack))
+                return true;
+        }
+        
+        return false;
+    }
+
