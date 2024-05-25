@@ -172,3 +172,70 @@
     }
 
 =========================================================================================================================================
+
+    void dfs(int s, vector<int> adj[], vector<bool> &vis, stack<int> &st){
+        
+            vis[s] = 1;
+            
+            for(int i : adj[s])
+                if(vis[i] == false)
+                    dfs(i, adj, vis, st);
+                    
+           
+            st.push(s);         
+    }
+    
+    vector<int> topoSort(int V, vector<int> adj[]) 
+    {
+        
+        vector<bool> vis(V, false);
+        stack<int> s;
+        vector<int> res;
+        
+        for(int i = 0; i < V; i++)
+            if(vis[i] == false)
+                dfs(i, adj, vis, s);
+                
+        while(s.empty() == 0){
+            
+            res.push_back(s.top());
+            s.pop();
+        }  
+        
+        return res;
+    }
+
+======================================================================================================================================
+ 
+    vector<int> topoSort(int V, vector<int> adj[]) 
+    {
+        
+        vector<int> indegree(V, 0);
+        queue<int> q;
+        vector<int> result;
+        
+        for(int u = 0; u < V; u++){
+            for(int &v : adj[u]){
+                indegree[v]++;
+            }
+        }
+        
+        for(int i = 0; i < V; i++)
+            if(indegree[i] == 0)
+                q.push(i);
+        
+        while(!q.empty()){
+            int t = q.front();
+            q.pop();
+            
+            result.push_back(t);
+            for(int &u: adj[t]){
+                indegree[u]--;
+                
+                if(indegree[u] == 0)
+                    q.push(u);
+            }
+        }
+        
+        return result;
+    }
