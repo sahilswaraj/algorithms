@@ -173,36 +173,36 @@
 
 =========================================================================================================================================
 
-    void dfs(int s, vector<int> adj[], vector<bool> &vis, stack<int> &st){
+
+    void dfs(int u, vector<int> graph[], vector<bool>& visited, stack<int>& st){
         
-            vis[s] = 1;
-            
-            for(int i : adj[s])
-                if(vis[i] == false)
-                    dfs(i, adj, vis, st);
-                    
-           
-            st.push(s);         
+        visited[u] = true;
+        
+        for(int &v : graph[u]){
+            if(visited[v] == false)
+                dfs(v, graph, visited, st);
+        }
+        
+        st.push(u);
     }
-    
-    vector<int> topoSort(int V, vector<int> adj[]) 
+     
+    vector<int> topoSort(int n, vector<int> graph[]) // Topological sort using dfs
     {
+        vector<bool> visited(n, false);
+        stack<int> st;
         
-        vector<bool> vis(V, false);
-        stack<int> s;
-        vector<int> res;
-        
-        for(int i = 0; i < V; i++)
-            if(vis[i] == false)
-                dfs(i, adj, vis, s);
-                
-        while(s.empty() == 0){
+        for(int i = 0; i < n; i++)
+            if(visited[i] == false)
+                dfs(i, graph, visited, st);
             
-            res.push_back(s.top());
-            s.pop();
-        }  
+        vector<int> result;
         
-        return res;
+        while(st.empty() == 0){
+            result.push_back(st.top());
+            st.pop();
+        }
+        
+        return result;
     }
 
 ======================================================================================================================================
@@ -277,31 +277,36 @@
     }
 
 =========================================================================================================================================
+    
+    //cycle detection in directed graph using dfs
 
-    bool isCycleDfs(int source, vector<int> adj[], vector<bool>& visited, vector<bool>& inStack){
+    bool dfs(int u, vector<int> graph[], vector<bool>& visited, vector<bool>& inStack){
         
-        visited[source] = true;
-        inStack[source] = true;
+        visited[u] = true;
+        inStack[u] = true;
         
-        for(int &u : adj[source]){
-            if(visited[u] == false && isCycleDfs(u,adj, visited, inStack))
-                return true;
-            else if(inStack[u] == true)
+        for(auto &v : graph[u]){
+            if(visited[v] == false){
+                if(dfs(v, graph, visited, inStack))
+                    return true;
+            }
+            else if(inStack[v] == true)
                 return true;
         }
         
-        inStack[source] = false;
+        inStack[u] = false;
         return false;
     }
     
-    bool isCyclic(int V, vector<int> adj[]) {
+    bool isCyclic(int n, vector<int> graph[]) {
         
-        vector<bool> visited(V, false);
-        vector<bool> inStack(V, false);
+        vector<bool> visited(n, false), inStack(n, false);
         
-        for(int i = 0; i < V; i++){
-            if(visited[i] == false && isCycleDfs(i, adj, visited, inStack))
-                return true;
+        for(int i = 0; i < n; i++){
+            if(visited[i] == false){
+                if(dfs(i, graph, visited, inStack))
+                    return true;
+            }
         }
         
         return false;
@@ -363,3 +368,4 @@
     }
 
 =========================================================================================================================================
+
