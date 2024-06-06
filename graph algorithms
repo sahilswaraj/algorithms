@@ -369,7 +369,7 @@
 
 =========================================================================================================================================
 
-    vector <int> dijkstra(int n, vector<vector<int>> graph[], int src) // Dijkastra's Algorithm
+    vector <int> dijkstra(int n, vector<vector<int>> graph[], int src) // Dijkastra's Algorithm using priority queue
     {
 
         priority_queue< pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>> > pq;
@@ -397,3 +397,35 @@
         return dist;
     }
 
+
+    vector <int> dijkstra(int n, vector<vector<int>> graph[], int src) // Dijkastra algorithm using Hash Set
+    {
+        set<pair<int,int>> st;
+        vector<int> dist(n, INT_MAX);
+        
+        dist[src] = 0;
+        st.insert({0, src});
+        
+        while(st.empty() == 0){
+            
+            auto &it = *st.begin();
+            int currNode = it.second, currDist = it.first;
+            st.erase({it});
+            
+            for(auto &iter : graph[currNode]){
+                int node = iter[0], weight = iter[1];
+                
+                if(dist[node] > currDist + weight){
+                    if(dist[node] != INT_MAX)
+                        st.erase({dist[node], node});
+                    dist[node] = currDist + weight;
+                    st.insert({dist[node], node});
+                }
+            }
+            
+        }
+        
+        return dist;
+    }
+
+======================================================================================================================================
