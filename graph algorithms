@@ -369,3 +369,31 @@
 
 =========================================================================================================================================
 
+    vector <int> dijkstra(int n, vector<vector<int>> graph[], int src) // Dijkastra's Algorithm
+    {
+
+        priority_queue< pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>> > pq;
+        
+        vector<int> dist(n, INT_MAX);
+        dist[src] = 0;
+        
+        pq.push({0, src});
+        
+        while(!pq.empty()){
+            int curr_node = pq.top().second, curr_dist = pq.top().first;
+            pq.pop();
+            
+            for(auto &it : graph[curr_node]){
+                
+                int it_node = it[0], it_dist = it[1];
+                
+                if(dist[it_node] > curr_dist + it_dist){
+                    dist[it_node] = curr_dist + it_dist;
+                    pq.push({dist[it_node], it_node});
+                }
+            }
+        }
+        
+        return dist;
+    }
+
