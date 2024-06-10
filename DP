@@ -1,0 +1,24 @@
+class Solution
+{
+    public:
+    //Function to return max value that can be put in knapsack of capacity W.
+    int cache[1001][1001];
+    int solve(int i, int W, int wt[], int val[]){
+        
+        if(i < 0 or W <= 0)
+            return 0;
+        if(cache[i][W] != -1)
+            return cache[i][W];
+        if(W-wt[i] >= 0){
+            return cache[i][W] = max(solve(i-1, W-wt[i], wt, val)+val[i], solve(i-1, W, wt, val));
+        }
+        else
+            return cache[i][W] = solve(i-1, W, wt, val);
+    }
+    
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+        memset(cache, -1, sizeof(cache));
+        return solve(n-1, W, wt, val);
+    }
+};
