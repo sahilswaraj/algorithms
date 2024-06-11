@@ -1,0 +1,25 @@
+class Solution
+{
+    public:
+    //Function to find the next greater element for each element of the array.
+    vector<long long> nextLargerElement(vector<long long> arr, int n){
+        
+        using ll = long long;
+        stack<ll> st;
+        st.push(0);
+        
+        vector<ll> result(n, -1);
+        
+        for(int i = 1; i < n; i++){
+
+            while(st.empty() == 0 && arr[st.top()] < arr[i]){
+                result[st.top()] = arr[i];
+                st.pop();
+            }
+            
+            st.push(i);
+        }
+        
+        return result;
+    }
+};
