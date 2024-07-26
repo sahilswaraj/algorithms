@@ -383,6 +383,9 @@
             int curr_node = pq.top().second, curr_dist = pq.top().first;
             pq.pop();
             
+            if(curr_dist > dist[curr_node]) // Optimization over relaxation process
+                continue;
+
             for(auto &it : graph[curr_node]){
                 
                 int it_node = it[0], it_dist = it[1];
@@ -477,4 +480,41 @@
           
     }
         
+=========================================================================================================================================
+
+    int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        using pi = pair<int,int>;
+        
+        priority_queue<pi, vector<pi>, greater<pi>> minHeap;
+        minHeap.push({0,0});
+        
+        vector<bool> inMST(V, false);
+        
+        int sum = 0;
+        
+        while(minHeap.empty() == false){
+            auto it = minHeap.top();
+            minHeap.pop();
+            
+            int node = it.second, wt = it.first;
+            
+            if(inMST[node] == true)
+                continue;
+            
+            inMST[node] = true;
+            sum += wt;
+            
+            for(auto it : adj[node]){
+                int currNode = it[0], currWt = it[1];
+                
+                if(inMST[currNode] == false){
+                    minHeap.push({currWt, currNode});
+                }
+            }
+        }
+        
+        return sum;
+    }
+
 
